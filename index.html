@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Weather App</title>
+</head>
+
+<body>
+
+    <section class="main-div">
+        <div class="center-div sm:shadow-2xl rounded-xl p-5 sm:backdrop-brightness-[.8]">
+            <h1 class="uppercase text-center pb-5 font-bold text-xl flex items-center justify-center gap-3"><i
+                    class="fa-solid fa-mountain-sun"></i> Weather App</h1>
+            <div class="search-div flex rounded-md overflow-hidden">
+                <input type="text" id="location" placeholder="Enter location" class="py-1 px-3 outline-none w-full">
+                <button id="location-btn" class="bg-blue-400 text-white px-3 text-xs whitespace-nowrap">Get Weather</button>
+            </div>
+            <div class="mt-5 h-[27rem] hidden" id="isLoading">
+                <p>Loading</p>
+            </div>
+            <div class="content-div" id="contain">
+                <div class="mt-5">
+                    <div class="flex items-center justify-center flex-col">
+                        <div class="flex items-center gap-1">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <p id="area"></p>
+                        </div>
+                        <div class="text-xs" id="date">
+                            Sunday, 30 Sep
+                        </div>
+                    </div>
+                    <div class="toggle flex justify-center mt-2 text-xs">
+                        <label class="switch">
+                            <input type="checkbox" id="temp-type" onclick="fetchWeather()">
+                            <span class="slider round"></span>
+                            <p class="temp-c">C</p>
+                            <p class="temp-f">F</p>
+                        </label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 pt-5 gap-2">
+                    <div class="text-center flex flex-col justify-between gap-2">
+                        <img src="./assets/sun.png" alt="" id="image" class="w-24 rounded-xl mx-auto">
+                        <p title="Weather Description" class="sm:text-xl font-bold text-slate-700" id="condition">Clear
+                        </p>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="sm:text-6xl text-5xl font-bold text-white drop-shadow-xl"><span
+                                id="curTemp"></span>&deg;</h3>
+                        <p title="Real Feeling">Feel like <span id="feelLike"></span>&deg;</p>
+                        <p title="Wind Speed"><i class="fa-solid fa-wind"></i> <span id="windSpeed"></span> Km/h</p>
+                        <p title="Humidity"><i class="fa-solid fa-droplet"></i> <span id="humidity"></span>%</p>
+                    </div>
+                </div>
+                <div class="mt-3 mx-1 backdrop-opacity-50 p-5 shadow-xl rounded-md">
+                    <h3 class="text-lg font-semibold">Air Quality</h3>
+                    <div class="grid grid-cols-2 mt-2 gap-5 text-xs ">
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-droplet"></i>
+                            <div>
+                                <p class="text-slate-600 font-semibold">Humidity</p>
+                                <p class="font-bold"><span id="card-hume"></span>%</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-cloud"></i>
+                            <div>
+                                <p class="text-slate-600 font-semibold">Cloud</p>
+                                <p class="font-bold" id="cloud"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-eye"></i>
+                            <div>
+                                <p class="text-slate-600 font-semibold">Visibility</p>
+                                <p class="font-bold" id="visibility"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <i class="fa-solid fa-sun"></i>
+                            <div>
+                                <p class="text-slate-600 font-semibold">UV</p>
+                                <p class="font-bold" id="uv"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 mt-5 gap-3">
+                    <div class="p-5 rounded-md shadow-lg bg-[#8db6cba0] flex items-center gap-3 justify-center">
+                        <div>
+                            <img src="" alt="" id="foreImg1" class="w-10 -mt-3 mx-auto">
+                            <p class="text-[10px] text-center -mt-1" id="foreDec1"></p>
+                        </div>
+                        <div class="text-xs font-bold text-center">
+                            <p id="foreDate1"></p>
+                            <p class="text-lg"><span id="foreTemp1"></span>&deg;</p>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-md shadow-lg bg-[#8db6cba0] flex items-center gap-3 justify-center">
+                        <div>
+                            <img src="" alt="" id="foreImg2" class="w-10 -mt-3 mx-auto">
+                            <p class="text-[10px] text-center -mt-1" id="foreDec2"></p>
+                        </div>
+                        <div class="text-xs font-bold text-center">
+                            <p id="foreDate2"></p>
+                            <p class="text-lg"><span id="foreTemp2"></span>&deg;</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="background-wrap">
+            <div class="x1">
+                <div class="cloud"></div>
+            </div>
+
+            <div class="x2">
+                <div class="cloud"></div>
+            </div>
+
+            <div class="x3">
+                <div class="cloud"></div>
+            </div>
+
+            <div class="x4">
+                <div class="cloud"></div>
+            </div>
+
+            <div class="x5">
+                <div class="cloud"></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./app.js"></script>
+</body>
+
+</html>
