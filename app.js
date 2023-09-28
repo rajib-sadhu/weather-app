@@ -4,29 +4,29 @@
 const fetchWeather = async (name) => {
     const location = document.getElementById('location').value;
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${name || location || 'kolkata'}&days=5`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': 'd34ae77cf0msh14ff28c0d59bc88p149894jsn24bc694c6800',
-            'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-        }
-    };
 
-    try {
-        // isLoadingToggle(true);
-        const response = await fetch(url, options);
-        const result = await response.json();
-        console.log(result);
-        if(result.error){
-            alert(name+' - '+result.error.message);
-        }
-        else{
-            const type = tempType();
-            setTemp(result, type);
-        }
-    } catch (error) {
-        console.error(error);
-    }
+    $(document).ready(function () {
+        $.ajax({
+            url: url,
+            method: 'get',
+            cache: false,
+            headers: {
+                'X-RapidAPI-Key': 'd34ae77cf0msh14ff28c0d59bc88p149894jsn24bc694c6800',
+                'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
+            },
+            success: function (result) {
+                    const type = tempType();
+                    setTemp(result, type);
+            },
+            error: function (error){
+                const err = error.responseJSON.error.message
+                console.log(err);
+                alert(name + ' - ' + err);
+            }
+        });
+    })
+
+
 }
 
 
@@ -39,7 +39,7 @@ const getLocation = () => {
     locationBtn.addEventListener('click', () => {
         const value = location.value;
         fetchWeather(value);
-        location.value='';
+        // location.value='';
     })
 }
 
@@ -85,7 +85,7 @@ const setTemp = (data, type) => {
     foreImg1.setAttribute('src', data?.forecast.forecastday[1]?.day?.condition?.icon);
     foreDec1.innerText = data?.forecast.forecastday[1]?.day?.condition?.text;
     foreDate1.innerText = (new Date(data?.forecast.forecastday[1]?.date)).toString().slice(4, 10);
-    
+
     foreImg2.setAttribute('src', data?.forecast.forecastday[2]?.day?.condition?.icon);
     foreDec2.innerText = data?.forecast.forecastday[2]?.day?.condition?.text;
     foreDate2.innerText = (new Date(data?.forecast.forecastday[2]?.date)).toString().slice(4, 10);
@@ -94,7 +94,7 @@ const setTemp = (data, type) => {
     if (type === 'C') {
         curTemp.innerText = data?.current?.temp_c;
         feelLike.innerText = data?.current?.feelslike_c;
-        
+
         foreTemp1.innerText = data?.forecast.forecastday[1]?.day?.avgtemp_c;
         foreTemp2.innerText = data?.forecast.forecastday[2]?.day?.avgtemp_c;
     }
@@ -137,4 +137,4 @@ const tempType = () => {
 }
 tempType();
 getLocation();
-fetchWeather('new Delhi');
+fetchWeather('kolkata');
